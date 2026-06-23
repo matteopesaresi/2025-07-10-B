@@ -10,8 +10,22 @@ class Controller:
         # the model, which implements the logic of the program and holds the data
         self._model = model
 
+    def handelCat(self):
+        for c in self._model.getCat():
+            self._view._ddcategory.options.append(ft.dropdown.Option(str(c[1])))
+        self._view.update_page()
+
     def handleCreaGrafo(self, e):
-        pass
+        categoria = self._view._ddcategory.value
+        data1 = self._view._dp1.value
+        data2 = self._view._dp2.value
+        if categoria is None or data1 is None or data2 is None:
+            self._view.txt_result.controls.clear()
+            self._view.txt_result.controls.append(ft.Text("Prima scegli una categoria e le sue date", color="red"))
+            return
+        self._model.buildGraph(categoria,data1,data2)
+        self._view.txt_result.controls.clear()
+        self._view.txt_result.controls.append(ft.Text(f"Grafo creato\nN.nodi: {self._model.graph_details[0]}\nN.archi: {self._model.graph_details[1]}"))
 
     def handleBestProdotti(self, e):
         pass
