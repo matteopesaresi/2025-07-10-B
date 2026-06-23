@@ -57,7 +57,7 @@ class DAO():
 from products 
 where category_id = %s"""
 
-        cursor.execute(query,categoria,)
+        cursor.execute(query,(categoria,))
 
         for row in cursor:
             results.append(Prodotto(**row))
@@ -73,15 +73,16 @@ where category_id = %s"""
         results = []
 
         cursor = conn.cursor(dictionary=True)
-        query = """select  p.product_id , p.product_name, oi.quantity as peso
+        query = """select  p.product_id , SUM(oi.quantity) as peso
 from order_items oi , products p , orders o 
 where p.category_id = %s and p.product_id = oi.product_id and o.order_id =oi.order_id 
-and o.order_date between %s and %s"""
+and o.order_date between %s and %s
+group by p.product_id"""
 
-        cursor.execute(query, category, data1, data2, )
+        cursor.execute(query, (category, data1, data2,) )
 
         for row in cursor:
-            results.append((row["product_id"],row["product_name"],row["peso"]))
+            results.append((row["product_id"],row["peso"]))
 
         cursor.close()
         conn.close()

@@ -20,19 +20,21 @@ class Model:
         listaEdges = self._DAO.get_edges(categoria,data1,data2)
         for prod in self._idMapNodi.values():
             self._graph.add_node(prod)
-        for a,b,p in listaEdges:
-            for a2,b2,p2 in listaEdges:
-                nodo1 = self._idMapNodi.get(a)
-                nodo2 = self._idMapNodi.get(a2)
-                peso = p + p2
-                if nodo1 is not None and nodo2 is not None:
-                    if nodo1.product_id < nodo2.product_id:
-                        self._graph.add_edge(nodo1,nodo2,peso)
-                    elif nodo1.product_id > nodo2.product_id:
-                        self._graph.add_edge(nodo2, nodo1, peso)
-                    else:
-                        self._graph.add_edge(nodo1, nodo2, peso)
-                        self._graph.add_edge(nodo2, nodo1, peso)
+        for id1, vendite1 in listaEdges:
+            for id2,vendite2 in listaEdges:
+                if id1 < id2:
+                    nodo1 = self._idMapNodi.get(id1)
+                    nodo2 = self._idMapNodi.get(id2)
+
+                    if nodo1 is not None and nodo2 is not None:
+                        peso = int(vendite1) + int(vendite2)
+                        if vendite1 < vendite2:
+                            self._graph.add_edge(nodo1,nodo2,peso)
+                        elif vendite1 > vendite2:
+                            self._graph.add_edge(nodo2, nodo1, peso)
+                        else:
+                            self._graph.add_edge(nodo1, nodo2, peso)
+                            self._graph.add_edge(nodo2, nodo1, peso)
 
     def graph_details(self):
         return len(self._graph.nodes),len(self._graph.edges)

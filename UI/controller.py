@@ -12,7 +12,7 @@ class Controller:
 
     def handelCat(self):
         for c in self._model.getCat():
-            self._view._ddcategory.options.append(ft.dropdown.Option(str(c[1])))
+            self._view._ddcategory.options.append(ft.dropdown.Option(key = str(c[0]) , text = str(c[1])))
         self._view.update_page()
 
     def handleCreaGrafo(self, e):
@@ -25,8 +25,8 @@ class Controller:
             return
         self._model.buildGraph(categoria,data1,data2)
         self._view.txt_result.controls.clear()
-        self._view.txt_result.controls.append(ft.Text(f"Grafo creato\nN.nodi: {self._model.graph_details[0]}\nN.archi: {self._model.graph_details[1]}"))
-
+        self._view.txt_result.controls.append(ft.Text(f"Grafo creato\nN.nodi: {self._model.graph_details()[0]}\nN.archi: {self._model.graph_details()[1]}"))
+        self._view.update_page()
     def handleBestProdotti(self, e):
         pass
 
