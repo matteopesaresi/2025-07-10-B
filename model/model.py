@@ -35,6 +35,15 @@ class Model:
                         else:
                             self._graph.add_edge(nodo1, nodo2, peso)
                             self._graph.add_edge(nodo2, nodo1, peso)
+    def top5(self):
+        lista = []
+        for n in self._graph.nodes:
+            peso_in = self._graph.in_degree(n, weight ='weight')
+            peso_out = self._graph.out_degree(n, weight ='weight')
+            score = peso_out-peso_in
+            lista.append((n,score))
+            lista.sort(key=lambda x: x[1], reverse= True)
+            return lista[:5]
 
     def graph_details(self):
         return len(self._graph.nodes),len(self._graph.edges)
