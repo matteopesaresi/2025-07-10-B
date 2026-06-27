@@ -27,8 +27,28 @@ class Controller:
         self._view.txt_result.controls.clear()
         self._view.txt_result.controls.append(ft.Text(f"Grafo creato\nN.nodi: {self._model.graph_details()[0]}\nN.archi: {self._model.graph_details()[1]}"))
         self._view.update_page()
+
     def handleBestProdotti(self, e):
-        pass
+        # Primo controllo: assicuriamoci che l'utente abbia creato il grafo
+        if len(self._model._graph.nodes) == 0:
+            self._view.txt_result.controls.clear()
+            self._view.txt_result.controls.append(ft.Text("Crea prima il grafo!", color="red"))
+            self._view.update_page()
+            return
+
+        # Chiediamo al model i 5 migliori
+        top5 = self._model.top5()  # <-- Cambiato nome metodo per coincidere con model.py
+
+        # Stampiamo i risultati nell'interfaccia
+        self._view.txt_result.controls.clear()
+        self._view.txt_result.controls.append(ft.Text("I cinque prodotti più venduti sono:"))
+
+        for prodotto, score in top5:
+            # Stampiamo nome del prodotto, anno e score (seguendo lo screenshot di esempio del PDF)
+            riga = f"{prodotto.product_name} - {prodotto.model_year} with score {score}"
+            self._view.txt_result.controls.append(ft.Text(riga))
+
+        self._view.update_page()
 
     def handleCercaCammino(self, e):
         pass

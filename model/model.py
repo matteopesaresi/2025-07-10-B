@@ -29,22 +29,24 @@ class Model:
                     if nodo1 is not None and nodo2 is not None:
                         peso = int(vendite1) + int(vendite2)
                         if vendite1 < vendite2:
-                            self._graph.add_edge(nodo1,nodo2,peso)
+                            self._graph.add_edge(nodo1,nodo2,weight=peso)
                         elif vendite1 > vendite2:
-                            self._graph.add_edge(nodo2, nodo1, peso)
+                            self._graph.add_edge(nodo2, nodo1, weight=peso)
                         else:
-                            self._graph.add_edge(nodo1, nodo2, peso)
-                            self._graph.add_edge(nodo2, nodo1, peso)
+                            self._graph.add_edge(nodo1, nodo2, weight=peso)
+                            self._graph.add_edge(nodo2, nodo1, weight=peso)
+
     def top5(self):
         lista = []
         for n in self._graph.nodes:
-            peso_in = self._graph.in_degree(n, weight ='weight')
-            peso_out = self._graph.out_degree(n, weight ='weight')
-            score = peso_out-peso_in
-            lista.append((n,score))
-            lista.sort(key=lambda x: x[1], reverse= True)
-            return lista[:5]
+            peso_in = self._graph.in_degree(n, weight='weight')
+            peso_out = self._graph.out_degree(n, weight='weight')
+            score = peso_in - peso_out  # <-- MODIFICA QUI (peso_in - peso_out)
+            lista.append((n, score))
 
+        # <-- MODIFICA QUI (Spesta questi due a sinistra, allineati con il 'for')
+        lista.sort(key=lambda x: x[1], reverse=True)
+        return lista[:5]
     def graph_details(self):
         return len(self._graph.nodes),len(self._graph.edges)
 
